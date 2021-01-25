@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "896326101790",
+    "project_id": "recipe-feea2",
+    "storage_bucket": "recipe-feea2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896326101790:android:7216855f2316ce1c2ab70f",
+        "android_client_info": {
+          "package_name": "com.example.recipe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "896326101790-od8ablcpfloh7lktf57tn5copmstdct6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPaVizVEbYXJ5fJdMG0fwzNFxdAzrZ2BM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "896326101790-od8ablcpfloh7lktf57tn5copmstdct6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

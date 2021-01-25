@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_pantry"
+        android:icon="@drawable/ic_person"
+        android:title="@string/title_pantry" />
+
+    <item
+        android:id="@+id/navigation_Menu"
+        android:icon="@drawable/ic_search"
+        android:title="@string/title_Menu" />
+
+    <item
+        android:id="@+id/navigation_favourites"
+        android:icon="@drawable/ic_person"
+        android:title="@string/title_favourites" />
+
+    <item
+        android:id="@+id/navigation_shoppinglist"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/title_shoppinglist" />
+</menu>

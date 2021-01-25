@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/loginbg"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+    />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:background="@drawable/transparentback"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="40dp"
+        >
+
+        <TextView
+            android:id="@+id/titletv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title"
+            android:textColor="#ffff"
+            android:fontFamily="cursive"
+            android:textSize="65sp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal"
+            android:paddingHorizontal="20dp"
+            />
+
+        <TextView
+            android:id="@+id/biotv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textbio"
+            android:textColor="#fff"
+            android:textSize="23sp"
+            android:layout_gravity="center_horizontal"
+            android:maxLines="1"
+            android:layout_marginBottom="10dp"
+            />
+
+        <Button
+            android:id="@+id/registerbtn"
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/regbtntext"
+            android:textColor="@color/white"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/capsuleshapedbutton"
+            />
+
+        <Button
+            android:id="@+id/signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/signintext"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/white"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/capsuleshapedbutton"
+            android:layout_marginTop="15dp"/>
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/btn_google_signin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:textColor="@android:color/white"
+            android:text="@string/continuetext"
+            android:id="@+id/guestsignin"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="15dp"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

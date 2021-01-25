@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Super Chef</string>
+    <string name="textbio">Help you to cook healthy food</string>
+    <string name="title">Super Chef</string>
+    <string name="regbtntext">REGISTER</string>
+    <string name="signintext">SIGN IN</string>
+    <string name="continuetext">Continue as guest? Skip</string>
+    <string name="remembertext">Remember</string>
+    <string name="Passwordtext">Password</string>
+    <string name="emailtext">Email</string>
+    <string name="ForgotPassword">Forgotpassword</string>
+    <string name="email">Email ID</string>
+    <string name="create">CREATE ACCOUNT</string>
+    <string name="pass">Password</string>
+    <string name="repass">Reenter Password</string>
+    <string name="signup">Signup</string>
+    <string name="cancel">CANCEL</string>
+    <string name="send">Send Password</string>
+    <string name="forgot">FORGOT PASSWORD</string>
+    <string name="mying">you have 0 ingredients</string>
+    <string name="heading">My ingredients</string>
+    <string name="title_pantry">Pantry</string>
+    <string name="title_Menu">Menu</string>
+    <string name="title_favourites">Favourites</string>
+    <string name="title_shoppinglist">Shopping list</string>
+</resources>
