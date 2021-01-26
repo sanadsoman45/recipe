@@ -57,6 +57,7 @@ public class Ingredients extends AppCompatActivity {
                         break;
 
                     case R.id.navigation_favourites:
+
                         fragment=new Favourites();
                         loadfragment(fragment);
                         break;
