@@ -50,10 +50,6 @@ public class Ingredients extends AppCompatActivity {
                 Fragment fragment;
                 switch(item.getItemId())
                 {
-                    case R.id.navigation_pantry:
-                        fragment=new Pantry();
-                        loadfragment(fragment);
-                        break;
 
                     case R.id.navigation_Menu:
                         fragment=new Menu();

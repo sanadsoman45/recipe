@@ -78,14 +78,12 @@
                     android:id="@+id/ing_col_search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginHorizontal="20dp"
                     android:padding="17dp"
-                    android:drawableLeft="@drawable/ic_search"
-                    android:drawablePadding="20dp"
+                    android:drawableStart="@drawable/ic_search"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/dialog_shape"
-                    android:elevation="5dp"
-                    android:hint="Add/remove/paste ingredients" />
+                    android:hint="@string/searchtext" />
 
             </LinearLayout>
 
@@ -155,30 +153,35 @@
 
             <FrameLayout
                 android:id="@+id/flFragment"
-                android:layout_width="400dp"
-                android:layout_height="450dp"
-                app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+                android:layout_width="match_parent"
+                android:layout_height="550dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="Suspicious0dp" />
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottomNavigationView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="?android:attr/windowBackground"
-                app:itemBackground="@color/white"
-                android:foreground="?attr/selectableItemBackground"
-                app:itemIconTint="@drawable/tab_color"
-                app:itemTextColor="@drawable/tab_color"
-                app:menu="@menu/bottom_nav_menu"
-                app:labelVisibilityMode="labeled"/>
-
+                />
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        >
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/windowBackground"
+            app:itemBackground="@color/white"
+            android:foreground="?attr/selectableItemBackground"
+            app:itemIconTint="@drawable/tab_color"
+            app:itemTextColor="@drawable/tab_color"
+            app:menu="@menu/bottom_nav_menu"
+            app:labelVisibilityMode="labeled"
+            android:foregroundGravity="bottom"
+            />
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

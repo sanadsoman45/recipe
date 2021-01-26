@@ -23,4 +23,5 @@
     <string name="title_Menu">Menu</string>
     <string name="title_favourites">Favourites</string>
     <string name="title_shoppinglist">Shopping list</string>
+    <string name="searchtext">Add/remove/paste ingredients</string>
 </resources>
