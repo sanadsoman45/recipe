@@ -6,9 +6,20 @@
     tools:context=".Pantry">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/title_pantry" />
+    <LinearLayout
+        android:layout_margin="15dp"
+        android:layout_width="330dp"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:background="#E5E4E2"
+        >
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="milk"
+            android:textOn="milk"
+            android:background="@drawable/ic_toggle"
+            />
+    </LinearLayout>
 
 </FrameLayout>
