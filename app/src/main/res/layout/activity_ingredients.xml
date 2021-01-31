@@ -155,6 +155,7 @@
             android:orientation="vertical">
 
             <FrameLayout
+                android:background="@android:color/transparent"
                 android:id="@+id/flFragment"
                 android:layout_width="match_parent"
                 android:layout_height="550dp"

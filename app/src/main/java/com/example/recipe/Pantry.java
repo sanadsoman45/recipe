@@ -1,12 +1,20 @@
 package com.example.recipe;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import Adapter.MyAdapter;
+import Model.ListItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +22,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class Pantry extends Fragment {
+    private RecyclerView.Adapter radp;
+    private List<ListItem> listitem;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,8 +68,22 @@ public class Pantry extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        Log.d("msg","hello from create view");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pantry, container, false);
+        View rootview=inflater.inflate(R.layout.fragment_pantry, container, false);
+        RecyclerView recycleview=rootview.findViewById(R.id.recyclerview1);
+        recycleview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        listitem=new ArrayList<>();
+        String[] arr={"Dairy","Meat","Poultry"};
+        String[] dairy_btn={"Milk","Butter","Butter","Butter","Yoghurt"};
+
+        Log.d("msg","Array length is:"+arr.length);
+        for(int i=0;i<arr.length;i++){
+            ListItem item=new ListItem(""+arr[i],dairy_btn);
+            listitem.add(item);
+            radp=new MyAdapter(getActivity(),listitem);
+            recycleview.setAdapter(radp);
+        }
+        return rootview;
     }
 }
