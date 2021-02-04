@@ -1,6 +1,8 @@
 package com.example.recipe;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -11,11 +13,16 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -23,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,14 +47,37 @@ public class Ingredients extends AppCompatActivity {
     ImageButton search_btn;
     TextView tx1;
     FrameLayout fl;
+    AppBarLayout appbarlay;
+    RelativeLayout rlv;
+    NestedScrollView nsv;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        nsv=findViewById(R.id.nestedScrollView);
+        appbarlay=findViewById(R.id.appbar);
+        toolbar=findViewById(R.id.toolbar);
         fl=findViewById(R.id.flFragment);
         fl.setForeground(null);
         loadfragment(new Pantry());
+        rlv=findViewById(R.id.relativecollapse);
+        appbarlay.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
+                    rlv.setVisibility(View.VISIBLE);
+                    rlv.setBackgroundColor(Color.parseColor("#0C73EB"));
+                    toolbar.setBackgroundColor(Color.parseColor("#0C73EB"));
+                } else {
+                    rlv.setVisibility(View.GONE);
+                    rlv.setBackgroundColor(0);
+                    toolbar.setBackgroundColor(0);
+                }
+            }
+        });
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
