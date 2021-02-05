@@ -20,12 +20,14 @@ import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.List;
 
+import Model.Ingredients;
 import Model.ListItem;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private final Context con;
     private final List<ListItem> listitems;
-    private int i=10;
+
+    private DatabaseHandler dbh;
     public MyAdapter(Context con, List<ListItem> listitems) {
         this.con = con;
         this.listitems = listitems;
@@ -34,6 +36,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        dbh=new DatabaseHandler(con);
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_ingredientsactivity,parent,false);
         return new ViewHolder(v);
 
@@ -94,10 +97,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         lp.setMargins(10, 10, 10, 10);
         btnTag.setLayoutParams(lp);
         btnTag.setBackgroundDrawable(con.getDrawable(R.drawable.ic_toggle));
+        if(dbh.getIngredient(String.valueOf(btnTag.getText()))!=null){
+            Log.d("ingmsg","Value is:"+dbh.getIngredient(String.valueOf(btnTag.getText())));
+            btnTag.setChecked(true);
+        }
         btnTag.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(buttonView.isChecked()){
+                    dbh.addingredients(new Ingredients(String.valueOf(btnTag.getText())));
                     Toast.makeText(con, btnTag.getText(), Toast.LENGTH_SHORT).show();
                 }
                 else{
