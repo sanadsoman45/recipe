@@ -41,7 +41,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     //Get a ingredient
-    public Ingredients getIngredient(String ingredient_name){
+    /*public Ingredients getIngredient(String ingredient_name){
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor=db.query(Util.TABLE_NAME,new String[]{Util.KEY_ingredientname},Util.KEY_ingredientname+"=?",
                 new String[]{ingredient_name},null,null,null,null);
@@ -49,6 +49,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
             Ingredients ingredients=new Ingredients(cursor.getString(0));
             return ingredients;
+    }*/
+
+    public boolean getIngredient(String ingredient_name){
+        boolean checkresult;
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor=db.query(Util.TABLE_NAME,new String[]{Util.KEY_ingredientname},Util.KEY_ingredientname+"=?",
+                new String[]{ingredient_name},null,null,null,null);
+        if(cursor!=null){
+            if(cursor.moveToFirst())
+                checkresult= true;
+            else
+                checkresult=false;
+        }
+        else
+            checkresult= false;
+        return checkresult;
     }
 
     public List<Ingredients> getAllingredients(){
@@ -69,4 +85,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return ing;
     }
+
+    public void deleteingredient(Ingredients ingredient){
+        SQLiteDatabase sqldata=this.getWritableDatabase();
+        sqldata.delete(Util.TABLE_NAME,Util.KEY_ingredientname+"=?",new String[]{String.valueOf(ingredient.getIngredient_name())});
+        sqldata.close();
+    }
+
+    public int get_count_ingredients(){
+        String query="SELECT * FROM "+ Util.TABLE_NAME;
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cur=db.rawQuery(query,null);
+        return cur.getCount();
+    }
+
+//    public void deleteallingredients(){
+//        SQLiteDatabase db=this.getWritableDatabase();
+//        String query="DELETE FROM "+Util.TABLE_NAME;
+//        db.execSQL(query);
+//    }
 }
