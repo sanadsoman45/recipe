@@ -24,4 +24,12 @@
     <string name="title_favourites">Favourites</string>
     <string name="title_shoppinglist">Shopping list</string>
     <string name="searchtext">Add/remove/paste ingredients</string>
+    <string name="my_pantry">My Pantry</string>
+    <string name="zero">0</string>
+    <string name="see_recipe">See Recipes</string>
+    <string name="remove">Clear Ingredients</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="addmore">+ ADD MORE</string>
+    <string name="see_recipes">SEE RECIPES</string>
 </resources>

@@ -50,20 +50,22 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="My Ingredients"
+                            android:text="@string/heading"
                             android:textSize="20sp"
                             android:textColor="@color/white"
                             android:textAlignment="center"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="You have 1 ingredients"
+                            android:text="@string/mying"
                             android:textSize="17sp"
                             android:textColor="@color/white"
                             android:textAlignment="center" />
                     </LinearLayout>
+
                     <Button
                         android:id="@+id/ing_col_settings"
                         android:layout_width="35dp"
@@ -72,7 +74,9 @@
                         android:layout_marginHorizontal="10dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/ic_settings" />
+                        android:background="@drawable/ic_settings"
+                        android:onClick="popup"
+                        />
 
                 </RelativeLayout>
 
@@ -80,10 +84,10 @@
                     android:id="@+id/ing_col_search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginHorizontal="15dp"
                     android:padding="17dp"
                     android:drawableStart="@drawable/ic_search"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="3dp"
                     android:background="@drawable/dialog_shape"
                     android:hint="@string/searchtext" />
 
@@ -97,11 +101,9 @@
                 >
 
                 <RelativeLayout
-                    android:layout_marginTop="15dp"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-
                     android:id="@+id/relativecollapse"
                     android:visibility="gone">
 
@@ -109,6 +111,7 @@
                         android:id="@+id/ing_user"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
+                        android:layout_marginStart="0dp"
                         android:layout_centerVertical="true"
                         android:backgroundTint="@color/white"
                         android:background="@drawable/ic_person" />
@@ -139,7 +142,8 @@
                         android:layout_marginHorizontal="10dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/ic_settings" />
+                        android:background="@drawable/ic_settings"
+                        android:onClick="popup"/>
 
                 </RelativeLayout>
 
@@ -153,6 +157,7 @@
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/custom_app_bar_background"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <RelativeLayout
@@ -162,26 +167,92 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:layout_marginBottom="35dp"
-                android:background="@android:color/transparent"
                 android:id="@+id/flFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginBottom="85dp"/>
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
+
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:gravity="bottom"
-        android:backgroundTint="#0C73EB"
-        >
+        android:id="@+id/botton_nav_btn_lay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottomNavigationView"
+            android:layout_marginBottom="2dp"
+            android:background="@color/white"
+            android:padding="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:weightSum="4"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:onClick="checkfrag"
+                android:background="#F1F2F4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/mypantrytext"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="#F1F2F4"
+                    android:text="@string/my_pantry"/>
+                <TextView
+                    android:id="@+id/mypantrycount"
+                    android:layout_margin="5dp"
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="8dp"
+                    android:background="@drawable/textviewdrawable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:text="4"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearaddrecipes"
+                android:background="#93C75B"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_weight="2"
+                android:layout_marginBottom="2dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:background="#93C75B"
+                    android:text="@string/see_recipes"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?android:attr/windowBackground"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/custombottomnavbar"
             app:itemBackground="@color/white"
             android:foreground="?attr/selectableItemBackground"
             app:itemIconTint="@drawable/tab_color"
@@ -190,6 +261,7 @@
             app:labelVisibilityMode="labeled"
             android:foregroundGravity="bottom"
             />
+
     </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
