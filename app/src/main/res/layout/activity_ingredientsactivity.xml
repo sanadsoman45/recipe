@@ -19,41 +19,54 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-           <LinearLayout
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-               <de.hdodenhof.circleimageview.CircleImageView
-                   app:civ_border_color="#808080"
-                   app:civ_border_width="1dp"
-                   android:layout_width="50dp"
-                   android:layout_height="50dp"
-                   android:src="@drawable/meat"/>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_margin="10dp"
+                    android:id="@+id/roundedimageview"
+                    app:civ_border_color="#808080"
+                    app:civ_border_width="1dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/meat"/>
 
-               <LinearLayout
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:orientation="vertical">
-                   <TextView
-                       android:id="@+id/titletv"
-                       android:text="Hello"
-                       android:textSize="18sp"
-                       android:textColor="@color/black"
-                       android:padding="5dp"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"/>
 
-                   <TextView
-                       android:id="@+id/counttextview"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:textSize="14sp"
-                       android:textColor="#808080"
-                       android:padding="5dp"/>
-               </LinearLayout>
+                <TextView
+                    android:layout_toRightOf="@id/roundedimageview"
+                    android:id="@+id/titletv"
+                    android:text="Hello"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:padding="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-           </LinearLayout>
+                <TextView
+                    android:layout_below="@id/titletv"
+                    android:text="Hello"
+                    android:layout_toRightOf="@id/roundedimageview"
+                    android:id="@+id/counttextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#808080"
+                    android:padding="5dp"/>
+
+                <Button
+                    android:id="@+id/expandcollapsebtn"
+                    android:tag="collapsed"
+                    android:layout_margin="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="fill"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/arrow_down"
+                    />
+
+            </RelativeLayout>
 
             <com.google.android.flexbox.FlexboxLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
@@ -65,6 +78,7 @@
                 app:flexWrap="wrap"
                 app:alignContent="stretch"
                 >
+
             </com.google.android.flexbox.FlexboxLayout>
         </LinearLayout>
 

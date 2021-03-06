@@ -1,10 +1,21 @@
 package Model;
+
+import android.graphics.drawable.Drawable;
+
+import com.example.recipe.R;
+
 public class ListItem {
     private String title;
     private String[] btn;
-    public ListItem(String title,String[] btn) {
+    private Drawable icon;
+    public ListItem(String title, String[] btn, Drawable icon) {
         this.title=title;
         this.btn=btn;
+        this.icon = icon;
+    }
+
+    public Drawable getIcon() {
+        return icon;
     }
 
     public String getTitle() {
