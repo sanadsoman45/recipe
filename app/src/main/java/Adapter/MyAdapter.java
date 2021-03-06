@@ -41,7 +41,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -63,7 +62,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         if(lst.getbtn_size()>10) {
             for(int j=0;j<=10;j++){
                 if(j==10){
-                    Button btnTag=create_normal_button(layout,lst);
+                    Button btnTag=new Button(con);
+                    btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    btnTag.setText("+"+(lst.getbtn_size()-10)+"more");
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins(10, 10, 10, 10);
+                    btnTag.setLayoutParams(lp);
+                    btnTag.setBackground(con.getDrawable(R.drawable.ic_normalbutton));
+                    layout.addView(btnTag);
+                    btnTag.setClickable(false);
                     holder.collapseexpandbut.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -85,7 +92,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                                     holder.collapseexpandbut.setBackground(con.getDrawable(R.drawable.arrow_down));
                                     holder.collapseexpandbut.setTag("collapsed");
                                     if(j==10){
-                                        create_normal_button(layout,lst);
+                                        layout.addView(btnTag);
                                     }
                                     else{
                                         create_Togglebtn(layout,lst,j,counttext);
@@ -101,23 +108,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             }
         }
         else{
+            holder.collapseexpandbut.setVisibility(View.GONE);
             for (int j = 0; j < lst.getbtn_size(); j++) {
                 create_Togglebtn(layout,lst,j,counttext);
             }
         }
     }
 
-    public Button create_normal_button(FlexboxLayout layout,ListItem lst){
-        Button btnTag=new Button(con);
-        btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        btnTag.setText("+"+(lst.getbtn_size()-10)+"more");
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(10, 10, 10, 10);
-        btnTag.setLayoutParams(lp);
-        btnTag.setBackground(con.getDrawable(R.drawable.ic_normalbutton));
-        layout.addView(btnTag);
-        return btnTag;
-    }
 
     public void create_Togglebtn(FlexboxLayout layout,ListItem lst,int j,TextView count_text){
         ToggleButton btnTag = new ToggleButton(con);
