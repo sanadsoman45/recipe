@@ -22,7 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_RECIPE_TABLE="CREATE TABLE "+Util.TABLE_NAME+"("+Util.KEY_ingredientname+" varchar(50))";
+        String CREATE_RECIPE_TABLE="CREATE TABLE "+Util.TABLE_NAME+"("+Util.KEY_ingredientname+ " varchar(50),"+Util.KEY_ing_section_name+" VARCHAR(50))";
         db.execSQL(CREATE_RECIPE_TABLE);
     }
 
@@ -36,9 +36,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues values=new ContentValues();
         values.put(Util.KEY_ingredientname,ing.getIngredient_name());
+        values.put(Util.KEY_ing_section_name,ing.getIng_section_name());
         //Inserting values
         db.insert(Util.TABLE_NAME,null,values);
         db.close();
+    }
+
+    public int get_ing_section_count(String ing_section_name){
+        String query="SELECT * FROM "+ Util.TABLE_NAME+" WHERE "+Util.KEY_ing_section_name+" = \""+ing_section_name+"\"";
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cur=db.rawQuery(query,null);
+        return cur.getCount();
     }
 
     //Get a ingredient

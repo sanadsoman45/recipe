@@ -48,6 +48,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/mying"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/heading"
@@ -58,6 +59,7 @@
                             />
 
                         <TextView
+                            android:id="@+id/counttv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/mying"
@@ -181,6 +183,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/bottommenulinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/bottomNavigationView"
@@ -193,11 +196,12 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/mypantrybtn"
                 android:onClick="checkfrag"
                 android:background="#F1F2F4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="2.5"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -207,6 +211,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
+                    android:textSize="14dp"
                     android:background="#F1F2F4"
                     android:text="@string/my_pantry"/>
                 <TextView
@@ -219,7 +224,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:gravity="center"
-                    android:text="4"
+                    android:text="0"
                     />
             </LinearLayout>
 
@@ -231,10 +236,11 @@
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
-                android:layout_weight="2"
+                android:layout_weight="1.5"
                 android:layout_marginBottom="2dp">
 
                 <TextView
+                    android:id="@+id/seerecipe"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"

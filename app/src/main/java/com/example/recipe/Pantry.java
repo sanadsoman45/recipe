@@ -1,11 +1,14 @@
 package com.example.recipe;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,9 +26,10 @@ import Model.ListItem;
  * Use the {@link Pantry#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Pantry extends Fragment {
+public class Pantry extends Fragment implements  Datatransferinterface{
     private RecyclerView.Adapter radp;
     private List<ListItem> listitem;
+    fragmenttoactivity fragact;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,8 +40,26 @@ public class Pantry extends Fragment {
     private String mParam1;
     private String mParam2;
 
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            fragact= (fragmenttoactivity) context;
+        }
+        catch (ClassCastException e){
+            throw new ClassCastException(context.toString()+"must implement fragment");
+        }
+    }
+
     public Pantry() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onDetach() {
+        fragact=null;
+        super.onDetach();
     }
 
     /**
@@ -76,8 +98,7 @@ public class Pantry extends Fragment {
         RecyclerView recycleview=rootview.findViewById(R.id.recyclerview1);
         recycleview.setLayoutManager(new LinearLayoutManager(getActivity()));
         listitem=new ArrayList<>();
-        String[] arr={"Dairy","Meat","Poultry"};
-        String[] dairy_btn={"Milk","Butter","Butter","Butter","Yoghurt"};
+        
         HashMap<String, String[]> ingredients = new HashMap<String, String[]>();
         ingredients.put("Meat",new String[]{"Chicken breast","beacon", "sausage", "chicken drumsticks", "pork",
                 "minced chicken", "chicken thighs", "chicken lollipop", "chicken gizzard", "chicken liver", "minced goat",
@@ -122,23 +143,15 @@ public class Pantry extends Fragment {
             Log.d("msg", String.format("%s %s", ing_section_name, Arrays.toString(ingredients.get(ing_section_name))));
             listitem.add(item);
         }
-
-
-
-        radp=new MyAdapter(getActivity(),listitem);
+        radp=new MyAdapter(getActivity(),listitem,this);
         recycleview.setAdapter(radp);
-
-
-        /*for(String ing_section_name:ingredients.keySet())
-        {
-            String ing_section=ing_section_name;
-            ListItem item=new ListItem(""+ing_section, ingredients.get(ing_section_name));
-            Log.d("msg",ing_section_name+" "+ingredients.get(ing_section_name));
-            listitem.add(item);
-            radp=new MyAdapter(getActivity(),listitem);
-            recycleview.setAdapter(radp);
-        }*/
-
         return rootview;
     }
+
+    @Override
+    public void setcount(int count) {
+        fragact.communicate(count);
+        Log.d("msgtag","count from setcout is:"+count);
+    }
+
 }
