@@ -2,6 +2,7 @@ package Adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,14 +64,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             for(int j=0;j<=10;j++){
                 if(j==10){
                     Button btnTag=new Button(con);
-                    btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                     btnTag.setText("+"+(lst.getbtn_size()-10)+"more");
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 100);
                     lp.setMargins(10, 10, 10, 10);
                     btnTag.setLayoutParams(lp);
+                    btnTag.setPadding(25,0,25,0);
                     btnTag.setBackground(con.getDrawable(R.drawable.ic_normalbutton));
                     layout.addView(btnTag);
                     btnTag.setClickable(false);
+                    btnTag.setTextSize(10);
                     holder.collapseexpandbut.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -118,18 +120,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public void create_Togglebtn(FlexboxLayout layout,ListItem lst,int j,TextView count_text){
         ToggleButton btnTag = new ToggleButton(con);
-        btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         btnTag.setText(lst.getBtn(j));
         btnTag.setTextOn(lst.getBtn(j));
         btnTag.setTextOff(lst.getBtn(j));
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 100);
         lp.setMargins(10, 10, 10, 10);
         btnTag.setLayoutParams(lp);
-        btnTag.setPadding(15,5,15,5);
+        btnTag.setPadding(25,0,25,0);
         btnTag.setTextSize(10);
         btnTag.setBackgroundDrawable(con.getDrawable(R.drawable.ic_toggle));
         count_text.setText(dbh.get_ing_section_count(lst.getTitle())+"/"+lst.getbtn_size()+" ingredients");
         if(dbh.getIngredient(String.valueOf(btnTag.getText())) ){
+            btnTag.setTextColor(Color.WHITE);
             Log.d("ingmsg","Value is:"+dbh.getIngredient(String.valueOf(btnTag.getText())));
             count_text.setText(dbh.get_ing_section_count(lst.getTitle())+"/"+lst.getbtn_size()+" ingredients");
             btnTag.setChecked(true);
@@ -139,10 +141,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(buttonView.isChecked()){
+                    btnTag.setTextColor(Color.WHITE);
                     dbh.addingredients(new Ingredients(String.valueOf(btnTag.getText()),lst.getTitle()));
 //                    Toast.makeText(con, btnTag.getText()+" "+dbh.get_count_ingredients(), Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    btnTag.setTextColor(Color.BLACK);
                     dbh.deleteingredient(new Ingredients(String.valueOf(btnTag.getText())));
 //                    Toast.makeText(con,"Else Block", Toast.LENGTH_SHORT).show();
                 }

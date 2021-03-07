@@ -105,7 +105,7 @@ public class Pantry extends Fragment implements  Datatransferinterface{
 
         listitem.add(new ListItem("Meat",new String[]{"Chicken breast","beacon", "sausage", "chicken drumsticks", "pork",
                 "minced chicken", "chicken thighs", "chicken lollipop", "chicken gizzard", "chicken liver", "minced goat",
-                "goat boneless", "mutton liver", "goat ribs and chops", "lamb ribs and chop", "goat shoulder", "mutton kidney"},getContext().getDrawable(R.drawable.meat)));
+                "goat boneless", "mutton livers", "goat ribs and chops", "lamb ribs and chop", "goat shoulder", "mutton kidney"},getContext().getDrawable(R.drawable.meat)));
         listitem.add(new ListItem("Sea Food",new String[]{"White compret", "seer", "indian salmon", "rohu", "basa", "catla","mackerel",
                 "squid", "prawn", "sea bahh", "pink perch", "red fish snapper", "butter fish", "king fish", "yellow sin tuna", "hilsa",
                 "bata", "lady fish", "black compret", "blue crab", "bombay duck", "tilapia", "marine cat fish", "kajoli", "murrell",

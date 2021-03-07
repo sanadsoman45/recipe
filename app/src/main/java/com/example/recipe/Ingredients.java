@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -39,7 +41,7 @@ import Adapter.DatabaseHandler;
 import Adapter.MyAdapter;
 
 public class Ingredients extends AppCompatActivity implements fragmenttoactivity{
-    TextView counttv,butcounttv,myingtextview,ing_search;
+    TextView counttv,butcounttv,ing_search;
     FrameLayout fl;
     AppBarLayout appbarlay;
     RelativeLayout rlv;
@@ -145,11 +147,34 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
             @Override
             public boolean onMenuItemSelected(@NonNull MenuBuilder menu, @NonNull MenuItem item) {
                 if(item.getItemId()==R.id.action_settings){
-                    dbh.deleteallingredients();
-                    butcounttv.setText(String.valueOf(dbh.get_count_ingredients()));
-                    counttv.setText("You Have "+dbh.get_count_ingredients()+" Ingredients");
-                    loadfragment(new Pantry());
-                    Toast.makeText(Ingredients.this, "All ingredients deleted", Toast.LENGTH_SHORT).show();
+                    if(dbh.get_count_ingredients()>0){
+                        dbh.deleteallingredients();
+                        butcounttv.setText(String.valueOf(dbh.get_count_ingredients()));
+                        counttv.setText("You Have "+dbh.get_count_ingredients()+" Ingredients");
+                        Toast.makeText(Ingredients.this, "All ingredients deleted", Toast.LENGTH_SHORT).show();
+                        shpmsgret=getSharedPreferences(sharedprefmsg,0);
+                        Log.d("msgtag","message is:"+shpmsgret.contains("message"));
+                        if(shpmsgret.contains("message"))
+                        {
+                            String message=shpmsgret.getString("message","notfound");
+                            Log.d("msgtag",message);
+                            Log.d("msg", String.valueOf(message=="pantry"));
+                            if(message.equals("pantry")){
+                                loadfragment(new Pantry());
+                                toolbar.setVisibility(View.VISIBLE);
+                                ing_search.setVisibility(View.VISIBLE);
+                                tv1.setText("My Pantry");
+                                tv2.setVisibility(View.VISIBLE);
+                            }
+                            else if(message.equals("selectedingredients")){
+                                loadfragment(new SelectedItem());
+                                toolbar.setVisibility(View.GONE);
+                                ing_search.setVisibility(View.GONE);
+                                tv1.setText("+ADD MORE RECIPES");
+                                tv2.setVisibility(View.GONE);
+                            }
+                        }
+                    }
                 }
                 return true;
             }
@@ -171,25 +196,20 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
 
     public void checkfrag(View v){
         shpmsgret=getSharedPreferences(sharedprefmsg,0);
-        Log.d("msgtag","message is:"+shpmsgret.contains("message"));
         if(shpmsgret.contains("message"))
         {
             String message=shpmsgret.getString("message","notfound");
-            Log.d("msgtag",message);
-            Log.d("msg", String.valueOf(message=="pantry"));
             if(message.equals("pantry")){
-                Log.d("msgtag","message is:"+message);
                 SharedPreferences.Editor editor=shpmsgvar.edit();
                 editor.putString("message","selectedingredients");
                 loadfragment(new SelectedItem());
                 toolbar.setVisibility(View.GONE);
                 ing_search.setVisibility(View.GONE);
-                tv1.setText("+ADD MORE RECIPES");
+                tv1.setText("+ADD MORE ITEMS");
                 tv2.setVisibility(View.GONE);
                 editor.commit();
             }
             else if(message.equals("selectedingredients")){
-                Log.d("msgtag","message is:"+message);
                 SharedPreferences.Editor editor=shpmsgvar.edit();
                 editor.putString("message","pantry");
                 loadfragment(new Pantry());
@@ -201,6 +221,7 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
             }
         }
     }
+
     public void checkPantry(View v){
         shpmsgret=getSharedPreferences(sharedprefmsg,0);
         if(shpmsgret.contains("message"))

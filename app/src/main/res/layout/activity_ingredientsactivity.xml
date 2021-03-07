@@ -10,11 +10,12 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="5dp"
         android:padding="5dp"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
             android:id="@+id/linear_layout"
+            android:background="#F8F6F6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -75,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/flexlay"
                 app:flexDirection="row"
+                android:padding="7dp"
                 app:flexWrap="wrap"
                 app:alignContent="stretch"
                 >

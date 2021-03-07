@@ -1,253 +1,261 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:id="@+id/appbar"
-        android:layout_height="200dp"
-        android:background="@drawable/shape_curve"
-        android:fitsSystemWindows="true">
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapse"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-            android:fitsSystemWindows="true"
-            app:expandedTitleTextAppearance="@style/ThemeOverlay.AppCompat">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_collapseMode="parallax"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp">
-
-                    <Button
-                        android:id="@+id/ing_col_user"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_centerVertical="true"
-                        android:backgroundTint="@color/white"
-                        android:background="@drawable/ic_person"
-                        />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/ing_col_user"
-                        android:layout_toLeftOf="@id/ing_col_settings"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/mying"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/heading"
-                            android:textSize="20sp"
-                            android:textColor="@color/white"
-                            android:textAlignment="center"
-                            android:textStyle="bold"
-                            />
-
-                        <TextView
-                            android:id="@+id/counttv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/mying"
-                            android:textSize="17sp"
-                            android:textColor="@color/white"
-                            android:textAlignment="center" />
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/ing_col_settings"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:backgroundTint="@color/white"
-                        android:layout_marginHorizontal="10dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ic_settings"
-                        android:onClick="popup"
-                        />
-
-                </RelativeLayout>
-
-                <EditText
-                    android:id="@+id/ing_col_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="15dp"
-                    android:padding="17dp"
-                    android:drawableStart="@drawable/ic_search"
-                    android:layout_marginTop="3dp"
-                    android:background="@drawable/dialog_shape"
-                    android:hint="@string/searchtext" />
-
-            </LinearLayout>
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                >
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:id="@+id/relativecollapse"
-                    android:visibility="gone">
-
-                    <Button
-                        android:id="@+id/ing_user"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_centerVertical="true"
-                        android:backgroundTint="@color/white"
-                        android:background="@drawable/ic_person" />
-
-                    <EditText
-                        android:id="@+id/ing_search"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/dialog_shape"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginVertical="5dp"
-                        android:elevation="5dp"
-                        android:textSize="13sp"
-                        android:drawableLeft="@drawable/ic_search"
-                        android:drawablePadding="17dp"
-                        android:layout_marginTop="10dp"
-                        android:paddingStart="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@id/ing_user"
-                        android:layout_toLeftOf="@id/ing_settings"
-                        android:hint="@string/searchtext"/>
-
-                    <Button
-                        android:id="@+id/ing_settings"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:backgroundTint="@color/white"
-                        android:layout_marginHorizontal="10dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ic_settings"
-                        android:onClick="popup"/>
-
-                </RelativeLayout>
-
-            </androidx.appcompat.widget.Toolbar>
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/custom_app_bar_background"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        android:background="#D7456A"
+        android:layout_above="@+id/botton_nav_btn_lay"
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ing_frag_container"
-            android:orientation="vertical">
+            android:layout_height="170dp"
+            android:fitsSystemWindows="true">
 
-            <FrameLayout
-                android:id="@+id/flFragment"
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapse"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="85dp"/>
-        </RelativeLayout>
+                android:fitsSystemWindows="true"
+                android:background="#D7456A"
+                app:expandedTitleTextAppearance="@style/ThemeOverlay.AppCompat"
+                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
-    </androidx.core.widget.NestedScrollView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_collapseMode="parallax">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp">
+
+                        <Button
+                            android:id="@+id/ing_col_user"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/ic_person"
+                            android:backgroundTint="@color/white" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@id/ing_col_settings"
+                            android:layout_toRightOf="@id/ing_col_user"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/mying"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/heading"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/counttv"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/mying"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textSize="17sp" />
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/ing_col_settings"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginHorizontal="10dp"
+                            android:background="@drawable/ic_settings"
+                            android:backgroundTint="@color/white"
+                            android:onClick="popup" />
+
+                    </RelativeLayout>
+
+                    <EditText
+                        android:id="@+id/ing_col_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@drawable/dialog_shape"
+                        android:drawableStart="@drawable/ic_search"
+                        android:hint="@string/searchtext"
+                        android:padding="17dp" />
+
+                </LinearLayout>
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin">
+
+                    <RelativeLayout
+                        android:id="@+id/relativecollapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <Button
+                            android:id="@+id/ing_user"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="0dp"
+                            android:background="@drawable/ic_person"
+                            android:backgroundTint="@color/white" />
+
+                        <EditText
+                            android:id="@+id/ing_search"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:layout_marginVertical="5dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_toLeftOf="@id/ing_settings"
+                            android:layout_toRightOf="@id/ing_user"
+                            android:background="@drawable/dialog_shape"
+                            android:drawableLeft="@drawable/ic_search"
+                            android:drawablePadding="17dp"
+                            android:elevation="5dp"
+                            android:hint="@string/searchtext"
+                            android:paddingStart="10dp"
+                            android:textSize="13sp" />
+
+                        <Button
+                            android:id="@+id/ing_settings"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginHorizontal="10dp"
+                            android:background="@drawable/ic_settings"
+                            android:backgroundTint="@color/white"
+                            android:onClick="popup" />
+
+                    </RelativeLayout>
+
+                </androidx.appcompat.widget.Toolbar>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="5dp"
+            android:background="@drawable/custom_app_bar_background"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <RelativeLayout
+                android:id="@+id/ing_frag_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/flFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+            </RelativeLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <RelativeLayout
         android:id="@+id/botton_nav_btn_lay"
         android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/bottommenulinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/bottomNavigationView"
-            android:layout_marginBottom="2dp"
-            android:background="@color/white"
-            android:padding="10dp"
-            android:layout_marginHorizontal="20dp"
-            android:weightSum="4"
             android:layout_centerHorizontal="true"
-            android:orientation="horizontal">
+            android:clickable="false"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:weightSum="4">
 
             <LinearLayout
                 android:id="@+id/mypantrybtn"
-                android:onClick="checkfrag"
-                android:background="#F1F2F4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2.5"
                 android:layout_gravity="center"
+                android:layout_weight="2.5"
+                android:background="#F1F2F4"
+                android:elevation="5dp"
                 android:gravity="center"
+                android:onClick="checkfrag"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/mypantrytext"
-                    android:layout_marginStart="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:textSize="14dp"
+                    android:layout_marginStart="10dp"
                     android:background="#F1F2F4"
-                    android:text="@string/my_pantry"/>
+                    android:padding="10dp"
+                    android:text="@string/my_pantry"
+                    android:textSize="14dp" />
+
                 <TextView
                     android:id="@+id/mypantrycount"
-                    android:layout_margin="5dp"
-                    android:paddingVertical="5dp"
-                    android:paddingHorizontal="8dp"
-                    android:background="@drawable/textviewdrawable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/textviewdrawable"
                     android:gravity="center"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="5dp"
                     android:text="0"
-                    />
+                    android:textColor="@color/white" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearaddrecipes"
-                android:background="#93C75B"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
+                android:layout_marginBottom="2dp"
                 android:layout_weight="1.5"
-                android:layout_marginBottom="2dp">
+                android:background="#93C75B"
+                android:elevation="5dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/seerecipe"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:gravity="center"
-                    android:textColor="@color/white"
                     android:background="#93C75B"
-                    android:text="@string/see_recipes"/>
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/see_recipes"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
@@ -257,17 +265,15 @@
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/bottommenulinear"
             android:background="@drawable/custombottomnavbar"
+            android:foregroundGravity="bottom"
             app:itemBackground="@color/white"
-            android:foreground="?attr/selectableItemBackground"
             app:itemIconTint="@drawable/tab_color"
             app:itemTextColor="@drawable/tab_color"
-            app:menu="@menu/bottom_nav_menu"
             app:labelVisibilityMode="labeled"
-            android:foregroundGravity="bottom"
-            />
+            app:menu="@menu/bottom_nav_menu" />
 
     </RelativeLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>
