@@ -14,13 +14,13 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapse"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="170dp"
                 android:fitsSystemWindows="true"
                 android:background="#D7456A"
                 app:expandedTitleTextAppearance="@style/ThemeOverlay.AppCompat"
@@ -155,7 +155,65 @@
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
+            <RelativeLayout
+                android:id="@+id/pantry_frag_lay"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#D7456A"
+                android:visibility="gone"
+                >
+
+                <Button
+                    android:id="@+id/ing_col_user_pantry"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/arrow_back"
+                    android:backgroundTint="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/ing_col_settings_pantry"
+                    android:layout_toRightOf="@id/ing_col_user_pantry"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/mying_pantry"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/heading1"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/counttv_pantry"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mying"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="17sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/ing_col_settings_pantry"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/ic_settings"
+                    android:backgroundTint="@color/white"
+                    android:onClick="popup" />
+
+            </RelativeLayout>
+
         </com.google.android.material.appbar.AppBarLayout>
+
+
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
@@ -182,6 +240,8 @@
         </androidx.core.widget.NestedScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
 
     <RelativeLayout
         android:id="@+id/botton_nav_btn_lay"

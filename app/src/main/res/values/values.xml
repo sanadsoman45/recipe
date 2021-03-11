@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="shopping_btn" type="id"/>
+    <item name="delete_btn" type="id"/>
+    <item name="item_name" type="id"/>
+    <item name="item_view_line" type="id"/>
+</resources>

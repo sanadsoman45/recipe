@@ -47,8 +47,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         dbh=new DatabaseHandler(con);
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_ingredientsactivity,parent,false);
-        return new MyAdapter.ViewHolder(v);
-
+        return new ViewHolder(v);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

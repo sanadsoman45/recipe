@@ -7,35 +7,41 @@
     tools:context=".SelectedItem"
     android:id="@+id/f1layout">
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/nocontlinearlay"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="vertical">-->
-<!--        <com.airbnb.lottie.LottieAnimationView-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            app:lottie_rawRes="@raw/vegetable"-->
-<!--            app:lottie_autoPlay="true"-->
-<!--            app:lottie_loop="true"-->
-<!--            />-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textAlignment="center"-->
-<!--            android:text="add your ingredients to get started"/>-->
-<!--    </LinearLayout>-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/l1layout"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tx1"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview1"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/nocontlinearlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            />
-    </LinearLayout>
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_height="250dp"
+                android:layout_width="250dp"
+                app:lottie_rawRes="@raw/vegetable"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginTop="10dp"
+                android:text="Add your ingredients \nto get started"/>
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </FrameLayout>

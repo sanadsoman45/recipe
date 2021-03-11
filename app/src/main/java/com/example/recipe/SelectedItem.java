@@ -1,6 +1,7 @@
 package com.example.recipe;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,61 +10,45 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Adapter.DatabaseHandler;
+import Adapter.MyAdapter;
+import Adapter.selectedpantryitems;
 import Model.Ingredients;
+import Model.ListItem;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SelectedItem#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class SelectedItem extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    TextView t,t1;
+public class SelectedItem extends Fragment implements  Datatransferinterface {
     DatabaseHandler dbh;
-    LinearLayout layout;
+    private RecyclerView.Adapter radp;
+    fragmenttoactivity fragact;
+    private LinearLayout animatelinearlay;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            fragact= (fragmenttoactivity) context;
+        }
+        catch (ClassCastException e){
+            throw new ClassCastException(context.toString()+"must implement fragment");
+        }
+    }
 
     public SelectedItem() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SelectedItem.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SelectedItem newInstance(String param1, String param2) {
-        SelectedItem fragment = new SelectedItem();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onDetach() {
+        fragact=null;
+        super.onDetach();
     }
 
     @SuppressLint({"SetTextI18n"})
@@ -71,21 +56,32 @@ public class SelectedItem extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_selected_item, container, false);
-        layout=view.findViewById(R.id.l1layout);
+        Log.d("msg","hello from create view");
+
+        // Inflate the layout for this fragment
+        View rootview=inflater.inflate(R.layout.fragment_selected_item, container, false);
+        animatelinearlay=rootview.findViewById(R.id.nocontlinearlay);
+        RecyclerView recycleview=rootview.findViewById(R.id.recyclerview1);
+        recycleview.setLayoutManager(new LinearLayoutManager(getActivity()));
         dbh=new DatabaseHandler(getContext());
-        List<Ingredients> ing_list=dbh.getAllingredients();
-        for(Ingredients ing:ing_list){
-            String all_ing=ing.getIngredient_name();
-            for(int i=0;i<=dbh.get_count_ingredients();i++) {
-                t1=new TextView(getContext());
-                t1.setPadding(50, 0, 0, 0);
-                t1.setTextSize(20);
-                t1.append("\n" + all_ing.toLowerCase());
-                Log.d("all_ing", "All Ing: " + all_ing);
-            }
-            layout.addView(t1);
+        Log.d("mstag","Array is:"+dbh.get_records());
+        Log.d("msgtag","length is:"+dbh.get_count_ingredients());
+        if(dbh.get_count_ingredients()>0){
+            recycleview.setVisibility(View.VISIBLE);
+            animatelinearlay.setVisibility(View.GONE);
+            radp=new selectedpantryitems(getActivity(),dbh.get_records(),this);
+            recycleview.setAdapter(radp);
         }
-        return view;
+        else{
+            recycleview.setVisibility(View.GONE);
+            animatelinearlay.setVisibility(View.VISIBLE);
+        }
+        return rootview;
+    }
+
+    @Override
+    public void setcount(int count) {
+        fragact.communicate(count);
+        Log.d("msgtag","count from setcout is:"+count);
     }
 }

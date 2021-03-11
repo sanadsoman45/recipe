@@ -29,10 +29,12 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -41,11 +43,14 @@ import Adapter.DatabaseHandler;
 import Adapter.MyAdapter;
 
 public class Ingredients extends AppCompatActivity implements fragmenttoactivity{
-    TextView counttv,butcounttv,ing_search;
+    TextView counttv,butcounttv,ing_search,counttexttv;
     FrameLayout fl;
+    Button backbtn;
     AppBarLayout appbarlay;
-    RelativeLayout rlv;
+    RelativeLayout rlv,pantryfragrellay;
     Toolbar toolbar;
+    NestedScrollView nsv;
+    CollapsingToolbarLayout collapsetoolbar;
     private DatabaseHandler dbh;
     TextView tv1,tv2,seerecipe;
     LinearLayout linearlay;
@@ -56,17 +61,21 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        nsv=findViewById(R.id.nestedScrollView);
         counttv=findViewById(R.id.counttv);
+        collapsetoolbar=findViewById(R.id.collapse);
+        backbtn=findViewById(R.id.ing_col_user_pantry);
+        pantryfragrellay=findViewById(R.id.pantry_frag_lay);
         butcounttv=findViewById(R.id.mypantrycount);
         dbh=new DatabaseHandler(getApplicationContext());
         linearlay=findViewById(R.id.bottommenulinear);
         appbarlay=findViewById(R.id.appbar);
         toolbar=findViewById(R.id.toolbar);
         fl=findViewById(R.id.flFragment);
+        counttexttv=findViewById(R.id.counttv_pantry);
         fl.setForeground(null);
         loadfragment(new Pantry());
         ing_search=findViewById(R.id.ing_col_search);
-
         shpmsgvar=getSharedPreferences(sharedprefmsg,0);
         SharedPreferences.Editor editor=shpmsgvar.edit();
         editor.putString("message","pantry");
@@ -75,6 +84,8 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
         tv1=findViewById(R.id.mypantrytext);
         tv2=findViewById(R.id.mypantrycount);
         seerecipe=findViewById(R.id.seerecipe);
+
+
 
         appbarlay.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -91,6 +102,15 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
                 }
             }
         });
+
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -135,6 +155,23 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        shpmsgret=getSharedPreferences(sharedprefmsg,0);
+        if(shpmsgret.contains("message")) {
+            String message = shpmsgret.getString("message", "notfound");
+            if(message.equals("pantry")){
+                finishAffinity();
+            }
+            else{
+                finish();
+            }
+        }
+
+
+    }
+
     @SuppressLint("RestrictedApi")
     public void popup(View v){
         @SuppressLint("RestrictedApi") MenuBuilder menuBuilder =new MenuBuilder(getApplicationContext());
@@ -151,6 +188,7 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
                         dbh.deleteallingredients();
                         butcounttv.setText(String.valueOf(dbh.get_count_ingredients()));
                         counttv.setText("You Have "+dbh.get_count_ingredients()+" Ingredients");
+                        counttexttv.setText("You Have "+dbh.get_count_ingredients()+" Ingredients");
                         Toast.makeText(Ingredients.this, "All ingredients deleted", Toast.LENGTH_SHORT).show();
                         shpmsgret=getSharedPreferences(sharedprefmsg,0);
                         Log.d("msgtag","message is:"+shpmsgret.contains("message"));
@@ -161,15 +199,15 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
                             Log.d("msg", String.valueOf(message=="pantry"));
                             if(message.equals("pantry")){
                                 loadfragment(new Pantry());
-                                toolbar.setVisibility(View.VISIBLE);
-                                ing_search.setVisibility(View.VISIBLE);
                                 tv1.setText("My Pantry");
+                                collapsetoolbar.setVisibility(View.VISIBLE);
+                                pantryfragrellay.setVisibility(View.GONE);
                                 tv2.setVisibility(View.VISIBLE);
                             }
                             else if(message.equals("selectedingredients")){
                                 loadfragment(new SelectedItem());
-                                toolbar.setVisibility(View.GONE);
-                                ing_search.setVisibility(View.GONE);
+                                collapsetoolbar.setVisibility(View.GONE);
+                                pantryfragrellay.setVisibility(View.VISIBLE);
                                 tv1.setText("+ADD MORE RECIPES");
                                 tv2.setVisibility(View.GONE);
                             }
@@ -194,6 +232,8 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
         transaction.commit();
     }
 
+
+
     public void checkfrag(View v){
         shpmsgret=getSharedPreferences(sharedprefmsg,0);
         if(shpmsgret.contains("message"))
@@ -203,8 +243,8 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
                 SharedPreferences.Editor editor=shpmsgvar.edit();
                 editor.putString("message","selectedingredients");
                 loadfragment(new SelectedItem());
-                toolbar.setVisibility(View.GONE);
-                ing_search.setVisibility(View.GONE);
+                collapsetoolbar.setVisibility(View.GONE);
+                pantryfragrellay.setVisibility(View.VISIBLE);
                 tv1.setText("+ADD MORE ITEMS");
                 tv2.setVisibility(View.GONE);
                 editor.commit();
@@ -213,8 +253,8 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
                 SharedPreferences.Editor editor=shpmsgvar.edit();
                 editor.putString("message","pantry");
                 loadfragment(new Pantry());
-                toolbar.setVisibility(View.VISIBLE);
-                ing_search.setVisibility(View.VISIBLE);
+                collapsetoolbar.setVisibility(View.VISIBLE);
+                pantryfragrellay.setVisibility(View.GONE);
                 tv1.setText("My Pantry");
                 tv2.setVisibility(View.VISIBLE);
                 editor.commit();
@@ -234,9 +274,10 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
                 SharedPreferences.Editor editor=shpmsgvar.edit();
                 editor.putString("message","pantry");
                 loadfragment(new Pantry());
-                toolbar.setVisibility(View.VISIBLE);
-                ing_search.setVisibility(View.VISIBLE);
+                collapsetoolbar.setVisibility(View.VISIBLE);
+                pantryfragrellay.setVisibility(View.GONE);
                 tv1.setText("My Pantry");
+                appbarlay.setNestedScrollingEnabled(true);
                 seerecipe.setBackgroundColor(Color.parseColor("#93C75B"));
                 tv2.setVisibility(View.VISIBLE);
                 editor.commit();
@@ -247,6 +288,7 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
     @Override
     public void communicate(int count) {
         butcounttv.setText(String.valueOf(count));
+        counttexttv.setText("You Have "+count+" Ingredients");
         counttv.setText("You Have "+count+" Ingredients");
     }
 }
