@@ -130,6 +130,14 @@ android:layout_height="match_parent">
             android:background="@drawable/capsuleshapedbutton"
             />
 
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/btn_google_signin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"/>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

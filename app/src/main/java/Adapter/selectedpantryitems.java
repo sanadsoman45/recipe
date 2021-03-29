@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipe.Datatransferinterface;
 import com.example.recipe.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.collection.LLRBNode;
 
 import java.util.ArrayList;
@@ -25,7 +27,9 @@ import java.util.List;
 
 import Model.Ingredients;
 import Model.ListItem;
+import Model.addtocart;
 import Model.selectedpantrymodel;
+import Utils.Util;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -35,13 +39,17 @@ public class selectedpantryitems extends RecyclerView.Adapter<selectedpantryitem
     private ArrayList<selectedpantrymodel> listitems;
     private DatabaseHandler dbh;
     Datatransferinterface dtf;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
 
     public selectedpantryitems(Context con, ArrayList<selectedpantrymodel> listitems, Datatransferinterface dtf) {
         this.con = con;
         this.listitems = listitems;
         this.dbh=new DatabaseHandler(con);
         this.dtf=dtf;
-        dtf.setcount(dbh.get_count_ingredients());
+        firebaseAuth= FirebaseAuth.getInstance();
+        firebaseUser= firebaseAuth.getCurrentUser();
+        dtf.setcount(dbh.get_count_ingredients(firebaseUser.getUid()));
     }
 
     @NonNull
@@ -80,24 +88,6 @@ public class selectedpantryitems extends RecyclerView.Adapter<selectedpantryitem
                 RelativeLayout.LayoutParams sub_item_delete_btn_params= new RelativeLayout.LayoutParams(70, 70);
                 sub_item_delete_btn.setId(R.id.delete_btn);
 
-
-                sub_item_delete_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String ing_name=String.valueOf(sub_item_name.getText());
-                        String ing_section=String.valueOf(holder.tv.getText());
-                        dbh.deleteingredient(new Ingredients(String.valueOf(sub_item_name.getText())));
-                        if(!dbh.getIngredient(ing_name)){
-                            holder.linearlay.removeView(sub_relative_item_lay);
-                        }
-                        if(dbh.get_ing_name(ing_section)<=0){
-                            holder.linear_main_lay.removeAllViews();
-                        }
-
-                        dtf.setcount(dbh.get_count_ingredients());
-                    }
-                });
-
                 View sub_item_line= new View(con);
                 RelativeLayout.LayoutParams sub_item_line_params= new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
                 sub_item_line.setId(R.id.item_view_line);
@@ -108,7 +98,7 @@ public class selectedpantryitems extends RecyclerView.Adapter<selectedpantryitem
                 sub_item_name.setLayoutParams(sub_item_name_params);
 
                 sub_item_shopping_btn_params.addRule(RelativeLayout.START_OF, sub_item_delete_btn.getId());
-                sub_item_shopping_btn.setBackground(ContextCompat.getDrawable(con, R.drawable.add_shopping_cart));
+                sub_item_shopping_btn.setBackground(ContextCompat.getDrawable(con, R.drawable.ic_addto_cart));
                 sub_item_shopping_btn.setLayoutParams(sub_item_shopping_btn_params);
 
                 sub_item_delete_btn_params.setMargins(10, 0, 10, 0);
@@ -125,6 +115,58 @@ public class selectedpantryitems extends RecyclerView.Adapter<selectedpantryitem
                 sub_relative_item_lay.addView(sub_item_shopping_btn);
                 sub_relative_item_lay.addView(sub_item_delete_btn);
                 sub_relative_item_lay.addView(sub_item_line);
+
+                if(dbh.getIngredient_cart(lst.getBtn(i),firebaseUser.getUid())){
+                    sub_item_shopping_btn.setBackground(ContextCompat.getDrawable(con, R.drawable.ic_addedtocart));
+                    sub_item_shopping_btn.setLayoutParams(sub_item_shopping_btn_params);
+                }
+
+                sub_item_delete_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String ing_name=String.valueOf(sub_item_name.getText());
+                        String ing_section=String.valueOf(holder.tv.getText());
+
+
+                        if(dbh.getIngredient(ing_name,firebaseUser.getUid())){
+                            Log.d("deleteddata","parent before delete is:"+sub_relative_item_lay.getParent());
+                            holder.linearlay.removeView(sub_relative_item_lay);
+                            Log.d("deletedata","parent after delete is:"+sub_relative_item_lay.getParent());
+                        }
+
+                        dbh.deleteingredient(new Ingredients(String.valueOf(sub_item_name.getText()),firebaseUser.getUid()));
+
+                        if(dbh.get_ing_name(ing_section,firebaseUser.getUid())<=0){
+                            Log.d("delete","count is:"+dbh.get_ing_name(ing_section,firebaseUser.getUid()));
+                            Log.d("deleteddata","parent before delete is:"+sub_relative_item_lay.getParent());
+                            holder.linear_main_lay.removeAllViews();
+                            Log.d("deletedata","parent after delete is:"+sub_relative_item_lay.getParent());
+                        }
+
+
+                        dtf.setcount(dbh.get_count_ingredients(firebaseUser.getUid()));
+                    }
+                });
+
+                sub_item_shopping_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!dbh.getIngredient_cart(String.valueOf(sub_item_name.getText()),firebaseUser.getUid())){
+                            Log.d("msgtag","hello");
+                            sub_item_shopping_btn.setBackground(ContextCompat.getDrawable(con, R.drawable.ic_addedtocart));
+                            dbh.add_Ingredients_cart(new addtocart(sub_item_name.getText().toString(),"tobuy",firebaseUser.getUid()));
+                            sub_item_shopping_btn.setLayoutParams(sub_item_shopping_btn_params);
+                        }
+                        else{
+                            Log.d("msgtag","hello from else");
+                            dbh.deleteingredient_cart(new addtocart(sub_item_name.getText().toString(),firebaseUser.getUid()));
+                            sub_item_shopping_btn.setBackground(ContextCompat.getDrawable(con, R.drawable.ic_addto_cart));
+                            sub_item_shopping_btn.setLayoutParams(sub_item_shopping_btn_params);
+                        }
+                    }
+                });
+
+
             }
 
     }

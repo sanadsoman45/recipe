@@ -33,4 +33,7 @@
     <string name="addmore">+ ADD MORE</string>
     <string name="see_recipes">SEE RECIPES</string>
     <string name="heading1">My Pantry</string>
+    <string name="updateemail">UPDATE EMAIL</string>
+    <string name="enter_pass">Enter The password</string>
+    <string name="updatemailid">UPDATE  EMAIL</string>
 </resources>

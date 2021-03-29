@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fav_clear_all"
+        android:icon="@drawable/clear_all"
+        android:iconTint="@color/black"
+        android:title="ClEAR ALL"
+        />
+</menu>

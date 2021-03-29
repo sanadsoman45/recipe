@@ -11,18 +11,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Recipe">
-        <activity android:name=".Ingredientsactivity"></activity>
-        <activity android:name=".ForgotPassword" />
-        <activity android:name=".Ingredients" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginPage" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".showrecipes_normal"></activity>
+        <activity android:name=".showrecipes" />
+        <activity android:name=".firebasesearchactivity" />
+        <activity android:name=".Searchactivity_favourites" />
+        <activity android:name=".search_fragment" />
+        <activity android:name=".Resetemail" />
+        <activity
+            android:name=".Email_verification"
+            android:noHistory="true" />
+        <activity android:name=".Splashscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Ingredientsactivity" />
+        <activity android:name=".ForgotPassword" />
+        <activity android:name=".Ingredients" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LoginPage" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

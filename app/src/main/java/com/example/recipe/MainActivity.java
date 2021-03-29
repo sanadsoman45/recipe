@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -35,31 +36,60 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mauth;
     private TextView anonymoussignin;
     private  static  final  String sharedprefmsg="myprefsfile";
-    private SharedPreferences shredlogret;
+//    private SharedPreferences shredlogret;
 
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d("msgtag","hello from onstart");
         FirebaseUser curreUser=mauth.getCurrentUser();
         GoogleSignInAccount account= GoogleSignIn.getLastSignedInAccount(this);
+
         if(account!=null)
         {
-            Log.d("errormsg","from start of MainActivity Curreuser"+curreUser.getEmail());
+            Log.d("errormsg","hello from account");
+            Log.d("errormsg","from start of MainActivity Curreuser"+account.getEmail());
             startActivity(new Intent(getApplicationContext(), Ingredients.class));
         }
         else if(curreUser!=null)
         {
             if(curreUser.isAnonymous())
             {
-                Log.d("msg","From anooymous condition check");
-                startActivity(new Intent(getApplicationContext(), Ingredients.class));
+                SharedPreferences shpret=getSharedPreferences(sharedprefmsg,0);
+                if(!shpret.contains("user_check_any"))
+                {
+
+                    Log.d("msg","From anooymous condition check");
+                    String message=shpret.getString("user_check_any","notfound");
+                    Log.d("msgtag",message);
+                    Log.d("msgtag","message is:"+message);
+                    if(!message.equals("yes")){
+                        Log.d("msgtag","hello from message");
+                        Log.d("msgtag","message is:"+message);
+                        startActivity(new Intent(getApplicationContext(), Ingredients.class));
+                    }
+                }
+
+
+
             }
             else
             {
+                Log.d("msgtag","shpret");
                 SharedPreferences shpret=getSharedPreferences(sharedprefmsg,0);
-                if(shpret.contains("message"))
+                if(shpret.contains("loginmsg"))
                 {
-                    startActivity(new Intent(getApplicationContext(), Ingredients.class));
+                    String message=shpret.getString("loginmsg","notfound");
+                    Log.d("msgtag",message);
+                    Log.d("msgtag","message is:"+message);
+                    if(message.equals("rememberme")){
+                        Log.d("msgtag","hello from message");
+                        Log.d("msgtag","message is:"+message);
+                        startActivity(new Intent(getApplicationContext(), Ingredients.class));
+                    }
+                }
+                else{
+                    Log.d("msgtag","hello");
                 }
             }
         }
@@ -146,29 +176,66 @@ public class MainActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Toast.makeText(getApplicationContext(),"Error in retrieving google data"+e.toString(),Toast.LENGTH_SHORT);
-
             }
         }
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mauth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        FirebaseUser curreUser=mauth.getCurrentUser();
+        if(curreUser!=null){
+            if(curreUser.isAnonymous()){
+                curreUser.linkWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mauth.getCurrentUser();
                             startActivity(new Intent(getApplicationContext(), Ingredients.class));
                             finish();
                         } else {
+//                            if(task.getException().getMessage().equals("The email address is already in use by another account.")) {
+                                Toast.makeText(getApplicationContext(),task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                                mgooglesigninclient.signOut();
+//                            }
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(getApplicationContext(),"Problem in firebase login",Toast.LENGTH_SHORT);
 
                         }
                     }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(),"Problem in firebase login1"+e.getMessage(),Toast.LENGTH_SHORT);
+                    }
                 });
+            }
+        }
+        else{
+            mauth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                startActivity(new Intent(getApplicationContext(), Ingredients.class));
+                                finish();
+                            } else {
+                                if(task.getException().getMessage().equals("The email address is already in use by another account.")) {
+                                    Toast.makeText(getApplicationContext(),"The email address is already in use by another account.",Toast.LENGTH_SHORT).show();
+                                }
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(getApplicationContext(),"Problem in firebase login",Toast.LENGTH_SHORT);
+
+                            }
+                        }
+                    });
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
     }
 
     public void anysign()
@@ -183,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent succint=new Intent(getApplicationContext(), Ingredients.class);
                             startActivity(succint);
                         } else {
+
                             // If sign in fails, display a message to the user.
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();

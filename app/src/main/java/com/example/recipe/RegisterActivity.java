@@ -25,6 +25,9 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -49,6 +52,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +69,6 @@ public class RegisterActivity extends AppCompatActivity {
         Button signupButton = findViewById(R.id.registerbtn);
         Button cancelButton=findViewById(R.id.cancelButton);
         firebaseAuth= FirebaseAuth.getInstance();
-        firebaseUser= firebaseAuth.getCurrentUser();
 
 
         //Normal SignIn Logic
@@ -74,64 +78,131 @@ public class RegisterActivity extends AppCompatActivity {
             repass=repasswordText.getText().toString().trim();
             if(email.isEmpty())
             {
-//                Toast.makeText(RegisterActivity.this, "Email can't be empty", Toast.LENGTH_SHORT).show();
-                emailText.setError("Email can't be empty");
+
+                Toast.makeText(RegisterActivity.this, "Email can't be empty", Toast.LENGTH_SHORT).show();
             }
             else if(!email.matches(emailPattern))
             {
-                emailText.setError("Please enter a valid email");
+                Toast.makeText(RegisterActivity.this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
             }
             else if(pass.isEmpty())
             {
-                passwordText.setError("Password can't be empty");
+                Toast.makeText(this, "Password can't be empty", Toast.LENGTH_SHORT).show();
             }
             else if(!pass.matches(passwordPattern))
             {
-                passwordText.setError("Password is too weak and (minimum 6 character)");
+                Toast.makeText(this, "Password must contain special character,Lower and upper case alphabets,digits and should be of length 6 to 11", Toast.LENGTH_SHORT).show();
             }
             else if(!pass.matches(repass))
             {
-                repasswordText.setError("Password didn't match");
+                Toast.makeText(this, "Password didn't match", Toast.LENGTH_SHORT).show();
             }
+
             else {
-                FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
-                firebaseAuth.createUserWithEmailAndPassword(email,pass)
-                        .addOnCompleteListener(task -> {
-                            Log.d("msg","Register Aajaa");
-                            if (task.isSuccessful()) {
-                                Log.d("msg","Task is sucessful from registration");
-                              //send verification code
-                                emailText.setText("");
-                                passwordText.setText("");
-                                repasswordText.setText("");
-                                Dataholder register = new Dataholder(email);
-                                FirebaseDatabase.getInstance().getReference("Super Chef").child("User Registration").child(firebaseAuth.getCurrentUser().getUid()).setValue(register);
-                                Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-                                emailText.setText("");
-                                passwordText.setText("");
-                                repasswordText.setText("");
-                                firebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        Log.d("msg","EMail SUcessfully Sent");
-                                        Toast.makeText(RegisterActivity.this, "Email Sent For Verification", Toast.LENGTH_SHORT).show();
+                if(firebaseAuth.getCurrentUser() != null){
+                    Log.d("msgtag","Email is:"+firebaseAuth.getCurrentUser().getEmail());
+                    if(firebaseAuth.getCurrentUser().isAnonymous()){
+                        AuthCredential credential= EmailAuthProvider.getCredential(email,pass);
+                        firebaseAuth.getCurrentUser().linkWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    emailText.setText("");
+                                    passwordText.setText("");
+                                    repasswordText.setText("");
+                                    Dataholder register = new Dataholder(email);
+                                    FirebaseDatabase.getInstance().getReference("Super Chef").child("User Registration").child(firebaseAuth.getCurrentUser().getUid()).setValue(register);
+                                    Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+                                    emailText.setText("");
+                                    passwordText.setText("");
+                                    repasswordText.setText("");
+                                    Log.d("User Is:","User Is:"+firebaseAuth.getCurrentUser());
+                                    Log.d("User Is:","User is:"+firebaseUser);
+                                    firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Log.d("msg","Email Sucessfully Sent");
+                                            Toast.makeText(RegisterActivity.this, "Email Sent For Verification", Toast.LENGTH_SHORT).show();
+                                            Log.d("msg","Exiting email id");
+                                            startActivity(new Intent(getApplicationContext(), LoginPage.class));
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d("msg","Email Not sent");
+                                            Toast.makeText(RegisterActivity.this, "Email Not Sent"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                }
+                                else
+                                {
+                                    if(task.getException().getMessage().equals("The email address is already in use by another account.")) {
+                                        Toast.makeText(getApplicationContext(),"The email address is already in use by another account.",Toast.LENGTH_SHORT).show();
                                     }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.d("msg","Email Not sent");
-                                        Toast.makeText(RegisterActivity.this, "Email Not Sent"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("errormsg","Exception is:"+e);
+                                Toast.makeText(RegisterActivity.this,e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    }
+                }
+                else{
+                    firebaseAuth.createUserWithEmailAndPassword(email,pass)
+                            .addOnCompleteListener(task -> {
+                                Log.d("msg","Register Aajaa");
+                                if (task.isSuccessful()) {
+                                    Log.d("msg","Task is sucessful from registration");
+                                    //send verification code
+                                    emailText.setText("");
+                                    passwordText.setText("");
+                                    repasswordText.setText("");
+                                    Dataholder register = new Dataholder(email);
+                                    FirebaseDatabase.getInstance().getReference("Super Chef").child("User Registration").child(firebaseAuth.getCurrentUser().getUid()).setValue(register);
+                                    Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+                                    emailText.setText("");
+                                    passwordText.setText("");
+                                    repasswordText.setText("");
+                                    Log.d("User Is:","User Is:"+firebaseAuth.getCurrentUser());
+                                    Log.d("User Is:","User is:"+firebaseUser);
+                                    firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Log.d("msg","Email Sucessfully Sent");
+                                            Toast.makeText(RegisterActivity.this, "Email Sent For Verification", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(getApplicationContext(), LoginPage.class));
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d("msg","Email Not sent");
+                                            Toast.makeText(RegisterActivity.this, "Email Not Sent"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    Log.d("msg","Exiting email id");
+
+                                }
+                                else
+                                {
+                                    if(task.getException().getMessage().equals("The email address is already in use by another account.")) {
+                                        Toast.makeText(getApplicationContext(),"The email address is already in use by another account.",Toast.LENGTH_SHORT).show();
                                     }
-                                });
-                                Log.d("msg","Exiting email id");
-                            }
-                            else
-                            {
-                                Toast.makeText(RegisterActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(e -> Toast.makeText(RegisterActivity.this,e.getMessage().toString(), Toast.LENGTH_LONG).show());
+
+//                                Toast.makeText(RegisterActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(e -> Toast.makeText(RegisterActivity.this,e.getMessage(), Toast.LENGTH_LONG).show());
+                }
+
             }
         });
+
+
 
         //Cancel Button Logic
         cancelButton.setOnClickListener(v -> {
@@ -165,8 +236,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else
                 {
-
-
                     //if nologic is satisfied then view is invisible or text is empty
                     eyeimg2.setVisibility(View.INVISIBLE);
                 }
@@ -202,13 +271,11 @@ public class RegisterActivity extends AppCompatActivity {
                             Log.d("msg","text Type");
                             eyeimg2.setImageResource(R.drawable.ic_baseline_visibility_off_24);
                         }
-
                         eyeimg2.setVisibility(View.VISIBLE);
                     }
                 }
                 else //if false or doesnt have focus or focus out
                 {
-
                     //Setting Visibility to Invisible
                     eyeimg2.setVisibility(View.INVISIBLE);
                 }
@@ -271,6 +338,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+
+
         //show and hide eye icon on focus change
         passwordText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -292,8 +361,8 @@ public class RegisterActivity extends AppCompatActivity {
                             //text is text type
                             eyeimg1.setImageResource(R.drawable.ic_baseline_visibility_off_24);
                         }
-
                         eyeimg1.setVisibility(View.VISIBLE);
+
                     }
                 }
                 else //if false or doesnt have focus or focus out

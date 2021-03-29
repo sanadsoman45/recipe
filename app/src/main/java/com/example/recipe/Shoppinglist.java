@@ -1,19 +1,57 @@
 package com.example.recipe;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
+
+import Adapter.DatabaseHandler;
+import Adapter.cartitems;
+import Adapter.selectedpantryitems;
+import Model.ListItem;
+import Utils.Util;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Shoppinglist#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Shoppinglist extends Fragment {
+public class Shoppinglist extends Fragment implements Datainterface_shoppinglist {
+
+    private RecyclerView.Adapter radp;
+    private LinearLayout animatelinearlay;
+    private DatabaseHandler dbh;
+    int count=0;
+    private RecyclerView recycleview;
+    fragtoactivityshoppinglist fragact;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            fragact= (fragtoactivityshoppinglist) context;
+        }
+        catch (ClassCastException e){
+            throw new ClassCastException(context.toString()+"must implement fragment");
+        }
+    }
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +64,12 @@ public class Shoppinglist extends Fragment {
 
     public Shoppinglist() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onDetach() {
+        fragact=null;
+        super.onDetach();
     }
 
     /**
@@ -55,10 +99,46 @@ public class Shoppinglist extends Fragment {
         }
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_shoppinglist, container, false);
+        View rootview=inflater.inflate(R.layout.fragment_shoppinglist, container, false);
+
+        firebaseAuth= FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        animatelinearlay=rootview.findViewById(R.id.nocontlinearlay);
+        recycleview=rootview.findViewById(R.id.recyclerview1);
+        recycleview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        dbh=new DatabaseHandler(getContext());
+        Log.d("mstag","Array is:"+dbh.get_records(firebaseUser.getUid()));
+        Log.d("msgtag","length is:"+dbh.get_count_ingredients(firebaseUser.getUid()));
+        if(dbh.get_count_ingredients_cart(firebaseUser.getUid())>0){
+            recycleview.setVisibility(View.VISIBLE);
+            animatelinearlay.setVisibility(View.GONE);
+            Log.d("msgtag","records are:"+dbh.get_records_cart(firebaseUser.getUid()));
+            radp=new cartitems(getActivity(),dbh.get_records_cart(firebaseUser.getUid()),this);
+            recycleview.setAdapter(radp);
+        }
+        else{
+            recycleview.setVisibility(View.GONE);
+            animatelinearlay.setVisibility(View.VISIBLE);
+        }
+        return rootview;
     }
+
+    public void setcount(int count) {
+        fragact.communicate_shoppinglist(count);
+        this.count=count;
+        Log.d("count","count from shoppinglist  is:"+count);
+        Log.d("msgtag","count from setcout is:"+count);
+        if(count<=0){
+            recycleview.setVisibility(View.GONE);
+            animatelinearlay.setVisibility(View.VISIBLE);
+        }
+    }
+
+
 }

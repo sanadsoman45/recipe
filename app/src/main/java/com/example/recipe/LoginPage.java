@@ -20,25 +20,39 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+
+import Adapter.DatabaseHandler;
 
 public class LoginPage extends AppCompatActivity {
     private Button cancelbtn,signinbtn;
     private TextView forgotPassword;
+    private SignInButton googlesignbtn;
     private FirebaseAuth mAuth;
     private ImageView eyeimg1;
     private CheckBox rembmecb;
     private FirebaseAuth fauth;
+    private int RC_SIGN_IN=101;
+    private GoogleSignInClient mgooglesigninclient;
     private FirebaseUser fuser;
     private SharedPreferences loginrembme;
     private  static  final  String sharedprefmsg="myprefsfile";
     private EditText useremail,password;
     private String usermail,userpass;
+    DatabaseHandler dbh;
     private String emailPattern="[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}"+"\\@"+"[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}"+"("+"\\."+"[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}"+")+";
     private String passwordPattern="^" +
             "(?=.*[0-9])" + //at least 1 digit
@@ -48,15 +62,21 @@ public class LoginPage extends AppCompatActivity {
             "(?=\\S+$)" +   // no white spaces
             ".{6,}" +   // at least 6 characters
             "$";
+    FirebaseAuth firebaseauth=FirebaseAuth.getInstance();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login_page);
+        processRequest();
+        dbh=new DatabaseHandler(getApplicationContext());
         useremail=findViewById(R.id.emailfield);
         password=findViewById(R.id.passwordfield);
         signinbtn=findViewById(R.id.signin);
+        googlesignbtn=findViewById(R.id.btn_google_signin);
         cancelbtn=findViewById(R.id.cancelbtn);
         eyeimg1=findViewById(R.id.eyeimg1);
         eyeimg1.setVisibility(View.INVISIBLE);
@@ -64,6 +84,15 @@ public class LoginPage extends AppCompatActivity {
         fuser=fauth.getCurrentUser();
         rembmecb=findViewById(R.id.Rememberme);
         forgotPassword=findViewById(R.id.forgotpassword);
+
+        googlesignbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                processlogin();
+            }
+        });
+
+
         signinbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,24 +100,34 @@ public class LoginPage extends AppCompatActivity {
                 usermail=useremail.getText().toString().trim();
                 if(usermail.isEmpty())
                 {
-                    useremail.setError("Email Id Cannot Be Empty");
+                    Toast.makeText(LoginPage.this, "\"Email Id Cannot Be Empty\"", Toast.LENGTH_SHORT).show();
                 }
                 else if(!usermail.matches(emailPattern))
                 {
-                    useremail.setError("Invalid Email Id");
+                    Toast.makeText(LoginPage.this, "Invalid Email Id", Toast.LENGTH_SHORT).show();
                 }
                 else if(userpass.isEmpty())
                 {
-                    password.setError("Password Is Empty");
+                    Toast.makeText(LoginPage.this, "Password Is Empty", Toast.LENGTH_SHORT).show();
                 }
                 else if(!userpass.matches(passwordPattern))
                 {
-                    password.setError("Invalid Password");
+                    Toast.makeText(LoginPage.this, "Invalid Password", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
                     try {
                         mAuth = FirebaseAuth.getInstance();
+                        if(mAuth.getCurrentUser()!=null){
+                            if(fuser.isAnonymous()){
+                                fauth.signOut();
+                                dbh.deleteallingredients(fuser.getUid());
+                                dbh.empty_fav(fuser.getUid());
+                                dbh.empty_cart(fuser.getUid());
+                                fuser.delete();
+                            }
+                        }
+
                         mAuth.signInWithEmailAndPassword(usermail,userpass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -100,9 +139,10 @@ public class LoginPage extends AppCompatActivity {
                                     password.setText("");
                                     if(rembmecb.isChecked())
                                     {
+                                        Log.d("msgtag","rembme");
                                         loginrembme=getSharedPreferences(sharedprefmsg,0);
                                         SharedPreferences.Editor editor=loginrembme.edit();
-                                        editor.putString("message","rememberme");
+                                        editor.putString("loginmsg","rememberme");
                                         editor.commit();
                                     }
                                     Intent i=new Intent(getApplicationContext(), Ingredients.class);
@@ -117,11 +157,6 @@ public class LoginPage extends AppCompatActivity {
                                     password.setText("");
                                     Toast.makeText(LoginPage.this, "Invalid Email Or Password", Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(LoginPage.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -233,6 +268,75 @@ public class LoginPage extends AppCompatActivity {
             password.setSelection(password.getText().length());
         }
     });
+
+    }
+
+    private void processRequest() {
+        //Creating a process request
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        //Build a google signin client with gso
+        mgooglesigninclient = GoogleSignIn.getClient(this, gso);
+
+    }
+
+    private void processlogin() {
+        //Calling the google signin dialog box with intent and using requestcode for acknowledgement.
+        Intent signInIntent = mgooglesigninclient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    //for checking the response recieved
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Toast.makeText(getApplicationContext(),"Error in retrieving google data"+e.toString(),Toast.LENGTH_SHORT);
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        FirebaseUser curreUser=fauth.getCurrentUser();
+        if(curreUser!=null){
+            if(curreUser.isAnonymous()){
+                fauth.signOut();
+                dbh.deleteallingredients(curreUser.getUid());
+                dbh.empty_fav(curreUser.getUid());
+                dbh.empty_cart(curreUser.getUid());
+                curreUser.delete();
+            }
+            fauth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                startActivity(new Intent(getApplicationContext(), Ingredients.class));
+                                finish();
+                            } else {
+
+                                Toast.makeText(getApplicationContext(),"The email address is already in use by another account.",Toast.LENGTH_SHORT).show();
+
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(getApplicationContext(),"Problem in firebase login",Toast.LENGTH_SHORT);
+
+                            }
+                        }
+                    });
+        }
+
 
     }
 }

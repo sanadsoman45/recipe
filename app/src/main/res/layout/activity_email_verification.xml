@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/nocontlinearlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_height="250dp"
+            android:layout_width="250dp"
+            app:lottie_rawRes="@raw/emailsend"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            />
+
+        <TextView
+            android:layout_marginTop="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28sp"
+            android:fontFamily="sans-serif-condensed-medium"
+            />
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_marginTop="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="We Have Sent You a Mail \n Please Verify Your Mail"
+            android:textSize="28sp"
+            android:fontFamily="sans-serif-condensed-medium"
+            />
+
+        <Button
+            android:id="@+id/resendmail"
+            android:background="@drawable/capsuleshapedbutton"
+            android:backgroundTint="#1C9CF6"
+            android:layout_marginTop="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resend Mail"/>
+
+        <TextView
+            android:layout_marginTop="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OR"
+            android:textSize="28sp"
+            />
+
+        <Button
+            android:id="@+id/homepagebtn"
+            android:background="@drawable/capsuleshapedbutton"
+            android:backgroundTint="#1C9CF6"
+            android:layout_marginTop="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Go Back To Main Page"/>
+
+
+    </LinearLayout>
+</RelativeLayout>

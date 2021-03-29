@@ -37,13 +37,13 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp">
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/ing_col_user"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/ic_person"
-                            android:backgroundTint="@color/white" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_person"
+                            android:tint="@color/white"
+                            android:background="@android:color/transparent" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -72,15 +72,15 @@
                                 android:textSize="17sp" />
                         </LinearLayout>
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/ing_col_settings"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
                             android:layout_marginHorizontal="10dp"
-                            android:background="@drawable/ic_settings"
-                            android:backgroundTint="@color/white"
+                            android:src="@drawable/ic_settings"
+                            android:background="@android:color/transparent"
+                            android:tint="@color/white"
                             android:onClick="popup" />
 
                     </RelativeLayout>
@@ -111,14 +111,13 @@
                         android:orientation="horizontal"
                         android:visibility="gone">
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/ing_user"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="0dp"
-                            android:background="@drawable/ic_person"
-                            android:backgroundTint="@color/white" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_person"
+                            android:background="@android:color/transparent"
+                            android:tint="@color/white" />
 
                         <EditText
                             android:id="@+id/ing_search"
@@ -128,25 +127,25 @@
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
-                            android:layout_toLeftOf="@id/ing_settings"
-                            android:layout_toRightOf="@id/ing_user"
+                            android:layout_marginEnd="20dp"
+                            android:layout_toStartOf="@id/ing_settings"
+                            android:layout_toEndOf="@id/ing_user"
                             android:background="@drawable/dialog_shape"
-                            android:drawableLeft="@drawable/ic_search"
+                            android:drawableStart="@drawable/ic_search"
                             android:drawablePadding="17dp"
                             android:elevation="5dp"
                             android:hint="@string/searchtext"
-                            android:paddingStart="10dp"
                             android:textSize="13sp" />
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/ing_settings"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
                             android:layout_marginHorizontal="10dp"
-                            android:background="@drawable/ic_settings"
-                            android:backgroundTint="@color/white"
+                            android:src="@drawable/ic_settings"
+                            android:background="@android:color/transparent"
+                            android:tint="@color/white"
                             android:onClick="popup" />
 
                     </RelativeLayout>

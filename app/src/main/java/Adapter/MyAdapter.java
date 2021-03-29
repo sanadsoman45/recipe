@@ -21,31 +21,37 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.recipe.Datatransferinterface;
 import com.example.recipe.R;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
 import Model.Ingredients;
 import Model.ListItem;
+import Utils.Util;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private final Context con;
     private List<ListItem> listitems;
     private DatabaseHandler dbh;
     Datatransferinterface dtf;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
 
     public MyAdapter(Context con, List<ListItem> listitems,Datatransferinterface dtf) {
         this.con = con;
         this.listitems = listitems;
         this.dtf=dtf;
         dbh=new DatabaseHandler(con);
-        dtf.setcount(dbh.get_count_ingredients());
+        firebaseAuth= FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        dtf.setcount(dbh.get_count_ingredients(firebaseUser.getUid()));
     }
 
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        dbh=new DatabaseHandler(con);
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_ingredientsactivity,parent,false);
         return new ViewHolder(v);
     }
@@ -119,7 +125,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public void create_Togglebtn(FlexboxLayout layout,ListItem lst,int j,TextView count_text){
         ToggleButton btnTag = new ToggleButton(con);
-        btnTag.setText(lst.getBtn(j));
+        Log.d("btnchecked1","Value of j is:"+j+"Btntext is:"+btnTag.getText());
+        btnTag.setText(lst.getBtn(j).toLowerCase());
         btnTag.setTextOn(lst.getBtn(j));
         btnTag.setTextOff(lst.getBtn(j));
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 100);
@@ -128,11 +135,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         btnTag.setPadding(25,0,25,0);
         btnTag.setTextSize(10);
         btnTag.setBackgroundDrawable(con.getDrawable(R.drawable.ic_toggle));
-        count_text.setText(dbh.get_ing_section_count(lst.getTitle())+"/"+lst.getbtn_size()+" ingredients");
-        if(dbh.getIngredient(String.valueOf(btnTag.getText())) ){
+        count_text.setText(dbh.get_ing_section_count(lst.getTitle(),firebaseUser.getUid())+"/"+lst.getbtn_size()+" ingredients");
+        if(dbh.getIngredient(String.valueOf(btnTag.getText()), firebaseUser.getUid()) ){
+            Log.d("btnchecked","Value of j is:"+j+"Btntext is:"+btnTag.getText());
             btnTag.setTextColor(Color.WHITE);
-            Log.d("ingmsg","Value is:"+dbh.getIngredient(String.valueOf(btnTag.getText())));
-            count_text.setText(dbh.get_ing_section_count(lst.getTitle())+"/"+lst.getbtn_size()+" ingredients");
+            Log.d("ingmsg","Value is:"+dbh.getIngredient(String.valueOf(btnTag.getText()),firebaseUser.getUid()));
+            count_text.setText(dbh.get_ing_section_count(lst.getTitle(),firebaseUser.getUid())+"/"+lst.getbtn_size()+" ingredients");
+            Log.d("btnchecked","Checked btn is:"+btnTag.getText());
             btnTag.setChecked(true);
         }
 
@@ -141,16 +150,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(buttonView.isChecked()){
                     btnTag.setTextColor(Color.WHITE);
-                    dbh.addingredients(new Ingredients(String.valueOf(btnTag.getText()),lst.getTitle()));
+                    dbh.addingredients(new Ingredients(String.valueOf(btnTag.getText().toString().toLowerCase()),lst.getTitle(),firebaseUser.getUid()));
 //                    Toast.makeText(con, btnTag.getText()+" "+dbh.get_count_ingredients(), Toast.LENGTH_SHORT).show();
                 }
                 else{
                     btnTag.setTextColor(Color.BLACK);
-                    dbh.deleteingredient(new Ingredients(String.valueOf(btnTag.getText())));
+                    dbh.deleteingredient(new Ingredients(String.valueOf(btnTag.getText().toString().toLowerCase()),firebaseUser.getUid()));
 //                    Toast.makeText(con,"Else Block", Toast.LENGTH_SHORT).show();
                 }
-                count_text.setText(dbh.get_ing_section_count(lst.getTitle())+"/"+lst.getbtn_size()+" ingredients");
-                dtf.setcount(dbh.get_count_ingredients());
+                count_text.setText(dbh.get_ing_section_count(lst.getTitle(),firebaseUser.getUid())+"/"+lst.getbtn_size()+" ingredients");
+                dtf.setcount(dbh.get_count_ingredients(firebaseUser.getUid()));
             }
         });
 

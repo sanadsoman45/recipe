@@ -4,13 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -18,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ForgotPassword extends AppCompatActivity {
     String email;
+    private  static  final  String sharedprefmsg="myprefsfile";
     String emailPattern="[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}"+"\\@"+"[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}"+"("+"\\."+"[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}"+")+";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +57,15 @@ public class ForgotPassword extends AppCompatActivity {
                     firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
                         if(task.isSuccessful())
                         {
-                            Toast.makeText(ForgotPassword.this, "Password sent to your email", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ForgotPassword.this, "Password reset link sent to your email", Toast.LENGTH_SHORT).show();
+                            SharedPreferences shpret=getSharedPreferences(sharedprefmsg,0);
+                            if(firebaseAuth.getCurrentUser()!=null){
+                                firebaseAuth.signOut();
+                                startActivity(new Intent(getApplicationContext(),LoginPage.class));
+                            }
+                            else{
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            }
                         }
                         else
                         {
