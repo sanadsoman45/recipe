@@ -65,9 +65,8 @@ public class selectedpantryitems extends RecyclerView.Adapter<selectedpantryitem
         selectedpantrymodel lst=listitems.get(position);
         holder.round_img.setImageDrawable(lst.getIcon());
         holder.tv.setText(lst.getTitle());
-
             for(int i=0;i<lst.getbtn_size();i++){
-
+                Log.d("msgtag","Array is:"+lst.getarr());
                 Log.d("msgtag","list size is:"+lst.getbtn_size()+""+i+"element is:"+lst.getBtn(i));
                 RelativeLayout sub_relative_item_lay= new RelativeLayout(con);
                 RelativeLayout.LayoutParams sub_item_params= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -111,10 +110,12 @@ public class selectedpantryitems extends RecyclerView.Adapter<selectedpantryitem
                 sub_item_line.setBackgroundColor(Color.parseColor("#979797"));
                 sub_item_line.setLayoutParams(sub_item_line_params);
 
-                sub_relative_item_lay.addView(sub_item_name);
-                sub_relative_item_lay.addView(sub_item_shopping_btn);
-                sub_relative_item_lay.addView(sub_item_delete_btn);
-                sub_relative_item_lay.addView(sub_item_line);
+                if(dbh.getIngredient(lst.getBtn(i),firebaseUser.getUid())){
+                    sub_relative_item_lay.addView(sub_item_name);
+                    sub_relative_item_lay.addView(sub_item_shopping_btn);
+                    sub_relative_item_lay.addView(sub_item_delete_btn);
+                    sub_relative_item_lay.addView(sub_item_line);
+                }
 
                 if(dbh.getIngredient_cart(lst.getBtn(i),firebaseUser.getUid())){
                     sub_item_shopping_btn.setBackground(ContextCompat.getDrawable(con, R.drawable.ic_addedtocart));
@@ -127,20 +128,20 @@ public class selectedpantryitems extends RecyclerView.Adapter<selectedpantryitem
                         String ing_name=String.valueOf(sub_item_name.getText());
                         String ing_section=String.valueOf(holder.tv.getText());
 
-
                         if(dbh.getIngredient(ing_name,firebaseUser.getUid())){
-                            Log.d("deleteddata","parent before delete is:"+sub_relative_item_lay.getParent());
+                            Log.d("deleteddata","parent from first if before delete is:"+sub_relative_item_lay.getParent());
+                            dbh.deleteingredient(new Ingredients(String.valueOf(sub_item_name.getText()),firebaseUser.getUid()));
                             holder.linearlay.removeView(sub_relative_item_lay);
-                            Log.d("deletedata","parent after delete is:"+sub_relative_item_lay.getParent());
+                            Log.d("deletedata","parent from first if after delete for "+ing_name+"is:"+sub_relative_item_lay.getParent());
                         }
 
-                        dbh.deleteingredient(new Ingredients(String.valueOf(sub_item_name.getText()),firebaseUser.getUid()));
+
 
                         if(dbh.get_ing_name(ing_section,firebaseUser.getUid())<=0){
                             Log.d("delete","count is:"+dbh.get_ing_name(ing_section,firebaseUser.getUid()));
-                            Log.d("deleteddata","parent before delete is:"+sub_relative_item_lay.getParent());
+                            Log.d("deleteddata","parent from second if before delete for:"+ ing_name+" is:"+sub_relative_item_lay.getParent());
                             holder.linear_main_lay.removeAllViews();
-                            Log.d("deletedata","parent after delete is:"+sub_relative_item_lay.getParent());
+                            Log.d("deletedata","parent from second if after delete for:"+ing_name+"is:"+sub_relative_item_lay.getParent());
                         }
 
 

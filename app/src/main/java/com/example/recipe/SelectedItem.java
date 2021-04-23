@@ -73,14 +73,17 @@ public class SelectedItem extends Fragment implements  Datatransferinterface {
         animatelinearlay=rootview.findViewById(R.id.nocontlinearlay);
         recycleview=rootview.findViewById(R.id.recyclerview1);
         recycleview.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         dbh=new DatabaseHandler(getContext());
 /*        Log.d("mstag","Array is:"+dbh.get_records(firebaseUser.getUid()));
         Log.d("msgtag","length is:"+dbh.get_count_ingredients(firebaseUser.getUid()));*/
+
         if(dbh.get_count_ingredients(firebaseUser.getUid())>0){
             recycleview.setVisibility(View.VISIBLE);
             animatelinearlay.setVisibility(View.GONE);
             radp=new selectedpantryitems(getActivity(),dbh.get_records(firebaseUser.getUid()),this);
             recycleview.setAdapter(radp);
+            radp.notifyDataSetChanged();
         }
         else{
             recycleview.setVisibility(View.GONE);

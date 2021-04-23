@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class selectedpantrymodel {
     private String title;
@@ -13,6 +14,10 @@ public class selectedpantrymodel {
         this.title=title;
         this.btn=btn;
         this.icon = icon;
+    }
+
+    public String getarr(){
+        return Arrays.toString(btn);
     }
 
     public Drawable getIcon() {

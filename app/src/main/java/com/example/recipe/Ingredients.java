@@ -162,6 +162,7 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
         seerecipe=findViewById(R.id.seerecipe);
         GoogleSignInAccount account= GoogleSignIn.getLastSignedInAccount(this);
 
+
         firebaseAuth= FirebaseAuth.getInstance();
         firebaseUser= firebaseAuth.getCurrentUser();
 
@@ -227,6 +228,10 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
             }
         }
 
+
+
+
+
         search_relative.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -278,6 +283,7 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
                 }
 
                 else{
+                    Toast.makeText(Ingredients.this, "LOGGED IN AS:"+ firebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
                     Log.d("msgtag","else from ingredients");
                     if(account !=null){
                         google_user_settings(v,account);
@@ -305,6 +311,7 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
                 }
 
                 else{
+                    Toast.makeText(Ingredients.this, "LOGGED IN AS:"+ firebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
                     Log.d("msgtag","else from ingredients");
                     if(account !=null){
                         google_user_settings(v,account);
@@ -328,8 +335,9 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
                     rlv.setVisibility(View.VISIBLE);
                     rlv.setBackgroundColor(Color.parseColor("#D7456A"));
                     toolbar.setBackgroundColor(Color.parseColor("#D7456A"));
-
+                    toolbar.setVisibility(View.VISIBLE);
                 } else {
+                    toolbar.setVisibility(View.GONE);
                     rlv.setVisibility(View.GONE);
                     rlv.setBackgroundColor(0);
                     toolbar.setBackgroundColor(0);
@@ -360,7 +368,7 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
                         settings_btn.setVisibility(View.GONE);
                         frag_name="menu";
                         settings_btn1.setVisibility(View.GONE);
-                        ing_header.setText("SUPERCOOK");
+                        ing_header.setText("SUPERCHEF");
                         settings_btn.setVisibility(View.GONE);
                         settings_btn1.setVisibility(View.GONE);
                         counttexttv.setVisibility(View.GONE);
@@ -503,11 +511,12 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
                     startActivity(new Intent(getApplicationContext(),Resetemail.class));
                 }
                 else if(item.getItemId()==R.id.change_password){
-                    startActivity(new Intent(getApplicationContext(),ForgotPassword.class));
-                    forgotpassword=getSharedPreferences(sharedprefmsg,0);
-                    SharedPreferences.Editor editor=forgotpassword.edit();
-                    editor.putString("forgotpassword","true");
-                    editor.commit();
+//                    startActivity(new Intent(getApplicationContext(),ForgotPassword.class));
+//                    forgotpassword=getSharedPreferences(sharedprefmsg,0);
+//                    SharedPreferences.Editor editor=forgotpassword.edit();
+//                    editor.putString("forgotpassword","true");
+//                    editor.commit();
+                    startActivity(new Intent(getApplicationContext(),resetpassword_1.class));
                 }
                 else if(item.getItemId()==R.id.logout){
                     firebaseAuth.signOut();
@@ -687,4 +696,5 @@ public class Ingredients extends AppCompatActivity implements fragmenttoactivity
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(getApplicationContext(),"Connection Failed",Toast.LENGTH_SHORT).show();
     }
+
 }

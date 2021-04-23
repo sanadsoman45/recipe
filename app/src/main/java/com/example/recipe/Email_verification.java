@@ -66,25 +66,28 @@ public class Email_verification extends AppCompatActivity {
         sendemailbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Log.d("msgtag","Email Sucessfully Sent");
-                            Toast.makeText(getApplicationContext(), "Email Sent For Verification", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Log.d("msgtag","Email not sent");
-                        }
+                if(!firebaseAuth.getCurrentUser().isEmailVerified()){
+                    firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Log.d("msgtag","Email Sucessfully Sent");
+                                Toast.makeText(getApplicationContext(), "Email Sent For Verification", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Log.d("msgtag","Email not sent");
+                            }
 
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("msgtag","Email Not sent"+e.toString());
-                        Toast.makeText(getApplicationContext(), "Email Not Sent"+e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("msgtag","Email Not sent"+e.toString());
+                            Toast.makeText(getApplicationContext(), "Email Not Sent"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
             }
         });
 
